@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.meleshko.flickrgallery.api.GalleryItem
 
 class PhotoGalleryFragment : Fragment() {
 
@@ -29,7 +30,7 @@ class PhotoGalleryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val flickrLiveData: LiveData<String> = FlickrFetchr().fetchContent()
+        val flickrLiveData: LiveData<List<GalleryItem>> = FlickrFetchr().fetchContent()
         flickrLiveData.observe(
             this,
             Observer { responseString ->
