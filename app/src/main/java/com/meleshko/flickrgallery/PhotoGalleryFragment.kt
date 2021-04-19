@@ -1,15 +1,15 @@
 package com.meleshko.flickrgallery
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.meleshko.flickrgallery.api.FlickrApi
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class PhotoGalleryFragment : Fragment() {
 
@@ -29,12 +29,13 @@ class PhotoGalleryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://www.flickr.com/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-
-        val flickrApi: FlickrApi = retrofit.create(FlickrApi::class.java)
+        val flickrLiveData: LiveData<String> = FlickrFetchr().fetchContent()
+        flickrLiveData.observe(
+            this,
+            Observer { responseString ->
+                Log.i("ZZZ", "Response received: $responseString")
+            }
+        )
     }
 
     companion object {
