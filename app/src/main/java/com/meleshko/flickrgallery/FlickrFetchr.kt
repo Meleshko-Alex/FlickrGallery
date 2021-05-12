@@ -40,14 +40,12 @@ class FlickrFetchr {
 
         flickrRequest.enqueue(object : Callback<FlickrResponse> {
             override fun onFailure(call: Call<FlickrResponse>, t: Throwable) {
-                Log.i("ZZZ", "onFailure: ")
             }
 
             override fun onResponse(
                 call: Call<FlickrResponse>,
                 response: Response<FlickrResponse>
             ) {
-                Log.i("ZZZ", "onResponse: ${response.body()}")
                 val flickrResponse: FlickrResponse? = response.body()
                 val photoResponse: PhotoResponse? = flickrResponse?.photos
                 var galleryItems: List<GalleryItem> = photoResponse?.galleryItems
