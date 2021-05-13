@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.meleshko.flickrgallery.api.GalleryItem
+import com.squareup.picasso.Picasso
 
 class PhotoGalleryFragment : Fragment() {
 
@@ -109,8 +110,15 @@ class PhotoGalleryFragment : Fragment() {
         fun newInstance() = PhotoGalleryFragment()
     }
 
-    private class PhotoHolder(itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
+    private class PhotoHolder(private val itemImageView: ImageView) : RecyclerView.ViewHolder(itemImageView) {
         val bindDrawable: (Drawable) -> Unit = itemImageView::setImageDrawable
+
+        fun bindGalleryItem(galleryItem: GalleryItem) {
+            Picasso.get()
+                .load(galleryItem.url)
+                .placeholder(R.drawable.ic_image_holder)
+                .into(itemImageView)
+        }
     }
 
     private inner class PhotoAdapter(private val galleryItems: List<GalleryItem>) :
@@ -123,12 +131,15 @@ class PhotoGalleryFragment : Fragment() {
 
         override fun onBindViewHolder(holder: PhotoHolder, position: Int) {
             val galleryItem = galleryItems[position]
-            val placeHolder: Drawable = ContextCompat.getDrawable(
+
+            // This code for use without the Picasso library
+            /*val placeHolder: Drawable = ContextCompat.getDrawable(
                 requireContext(), R.drawable.ic_image_holder
             ) ?: ColorDrawable()
             holder.bindDrawable(placeHolder)
+            thumbnailDownloader.queueThumbnail(holder, galleryItem.url)*/
 
-            thumbnailDownloader.queueThumbnail(holder, galleryItem.url)
+            holder.bindGalleryItem(galleryItem)
         }
 
         override fun getItemCount(): Int = galleryItems.size
